@@ -264,7 +264,7 @@
         
         var localUsername = document.getElementById("username").textContent;
         var localRoom = document.getElementById("room").textContent;
-        const link = 'http://' + document.domain + ':' + location.port;
+        const link = 'https://' + document.domain + ':' + location.port;
         var socket = io.connect(link);
         socket.on('connect', function() {
             console.log('User Connected');
