@@ -1,11 +1,14 @@
 from flask import Flask, render_template, session, redirect, request, send_file
 from flask_socketio import SocketIO, emit
+from flask_talisman import Talisman
 import random as r
 import math
 import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)  # clears all sessions
+
+Talisman(app)
 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
