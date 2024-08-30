@@ -18,10 +18,10 @@ if BYPASS_AUTH:
     'timeLeft': 90, 'stopTimeCountdown': {'aarav': False, 'adsdfsdfsdfsdfsdfsdfsdfsdf': False, 'ad':False}, 'usersWhoGuessedWordTime': {}, 'points': {'aarav': 0, 'adsdfsdfsdfsdfsdfsdfsdfsdf': 0, 'ad':0}, 'allowPointUpdate': False}}
 
 
-with open('logs\\log.txt', "w+") as f:
-    f.seek(0)
-    f.truncate(0)
-    f.seek(0)
+# with open('logs\\log.txt', "w+") as f:
+#     f.seek(0)
+#     f.truncate(0)
+#     f.seek(0)
 
 
 def log(msg):
@@ -115,7 +115,7 @@ def calculatePointsForRoom(room):
     if not rooms[room]['allowPointUpdate']:
         return
 
-    log(f'Calculating points for room {room}, previous points: {rooms[room]['points']}')
+    # log(f'Calculating points for room {room}, previous points: {rooms[room]['points']}')
 
     currentArtist = rooms[room]['order'][math.floor(session['round']-1)]
 
@@ -150,8 +150,8 @@ def calculatePointsForRoom(room):
             else:
                 rooms[room]['points'][user] += round(-30/expectedGuessesMade)
     rooms[room]['allowPointUpdate'] = False
-    log(f'    -> Finished calculating points for room {room}, new points: {rooms[room]['points']}')
-    
+    # log(f'    -> Finished calculating points for room {room}, new points: {rooms[room]['points']}')
+
 
 def getNewRoomCode():
     def generateRandomRoomCode():
@@ -272,12 +272,12 @@ def lobbyForRoom():
             session['inRoom'] = True
             session['room'] = 'NEEHOMA'
             session['round'] = None
-        else: 
+        else:
             return plainTextPage('You are not in a room', '/', 'Join one?')
 
-        
 
-        
+
+
 
     room = session['room']
     if room not in rooms.keys():
@@ -310,10 +310,10 @@ def gameWait():
             session['room'] = 'NEEHOMA'
             session['round'] = None
             rooms[session['room']]['started'] = True
-        else: 
+        else:
             return plainTextPage('You are not in a room', '/', 'Join one?')
 
-        
+
 
     if session.get('inRoom'):
         if rooms[session['room']]['started']:
@@ -376,8 +376,7 @@ def gameOverFinalScreen():
             rooms[room]['stopTimeCountdown'][username] = False
             curRound = session['round']
             if len(rooms[room]['order']) + 1 == curRound:
-                sortedUsers = sorted([[i, rooms[room]['points'][i]] for i in rooms[room]
-                                     ['users']], key=lambda x: rooms[room]['points'][x[0]], reverse=True)
+                sortedUsers = sorted([[i, rooms[room]['points'][i]] for i in rooms[room]['users']], key=lambda x: rooms[room]['points'][x[0]], reverse=True)
 
                 return render_template("gameOverScreen.html", room=room, username=username, leaderboard=sortedUsers)
 
@@ -552,8 +551,7 @@ def handleStartTimeCountdownForClient(data):
                 if room_ == room and username_ == username:
                     if selfPID > PID:
                         # delete the older process for being too old
-                        print(f'\nDeleting other time countdown process | PID: {
-                              PID}, data: {selfPIDContent}, selfPID: {selfPID}\n')
+                        print(f'\nDeleting other time countdown process | PID: {PID}, data: {selfPIDContent}, selfPID: {selfPID}\n')
                         del countdownPIDs[PID]
             else:
                 return
@@ -586,7 +584,7 @@ def handleStartTimeCountdownForClient(data):
         print(f'\nTime countdown process deleted by other process | selfPID {selfPID}, data: {selfPIDContent}\n')
     if timeLeft <= 0:
         # if have gotten to this place, the round will end due to not all ppl guessing it
-        print(f'\n\n\nTIME ELAPSED {rooms[room]['allowPointUpdate']}\n\n\n')
+        print(f'\n\n\nTIME ELAPSED {rooms[room]["allowPointUpdate"]}\n\n\n')
         if session['round'] not in rooms[room]['roundPointsUpdates']:
             for user in rooms[room]['users']:
                 rooms[room]['advanceRound'][user] = True
@@ -598,7 +596,7 @@ def handleStartTimeCountdownForClient(data):
             emit('endRound', {'room': room}, broadcast=True)
         else:
             rooms[room]['allowPointUpdate'] = False
-        
+
 
 
 @socketio.on('processGuess')
