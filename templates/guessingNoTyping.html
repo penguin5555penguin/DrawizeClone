@@ -177,7 +177,7 @@
       const localUsername = document.getElementById("username").textContent;
       const timeLeftElement = document.getElementById("timeLeft");
 
-      const link = "http://" + document.domain + ":" + location.port;
+      const link = "https://" + document.domain + ":" + location.port;
       var socket = io.connect(link);
 
       socket.on("connect", function () {
