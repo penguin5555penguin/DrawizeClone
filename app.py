@@ -171,6 +171,10 @@ def getNewRoomCode():
 
 # routes
 
+@app.after_request
+def setCSP(response):
+    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'nonce-randomValueHere'; style-src 'self';"
+    return response
 
 @app.route('/')
 def homePage():
